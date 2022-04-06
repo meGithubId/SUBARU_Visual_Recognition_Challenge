@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{CJKutf8}
+\newcommand*{\Ja}[1]{\begin{CJK}{UTF8}{ipxm}#1\end{CJK}}
+\usepackage[colorlinks, linkcolor=blue]{hyperref}  %超链接
+
+
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+
+  \begin{itemize}
+    \item 计算前车距离
+    \item 视频$\Rightarrow$图片
+    \item 计算前车左上角，左下角，右上角，3个坐标位置
+      \begin{itemize}\item 批量处理\end{itemize}
+    \item 模型
+    \begin{itemize}
+      \item loss确认
+      \begin{itemize}
+        \item \Ja{各シーンに対する誤差}\\
+               $$e_j = \frac{1}{n_j-19} \sum_{i=20}^{n_j}min(\left\vert \frac{p_i-t_i}{0.07t_i+3} \right\vert, 1)$$
+               \small$$\begin{array}{lr}
+                         n_j:\mbox{\Ja{シーンjにおける総フレーム数}}\\
+                         p_i:\mbox{\Ja{(シーンjの)フレーム番号に対する予測値}}\\
+                         t_i:\mbox{\Ja{(シーンjの)フレーム番号に対する予測値}}
+                       \end{array}$$\normalsize
+        \item \Ja{全てのシーンに対する誤差(重み付き平均)}\\
+                 $$error = \frac{\sum_{j=1}^{s}w_je_j}{\sum_{j=1}^{s}w_j}$$\\
+                 \small$$\begin{array}{lr}
+                             \left(w_j = \left\{
+                                            \begin{array}{lr}
+                                              3\quad\mbox{\Ja{”評価値計算時の重み付加” = ”有”}}\\
+                                              1\quad\mbox{\Ja{上記以外}}\\
+                                            \end{array}
+                                         \right.
+                             \right)\\
+                             \mbox{\Ja{s: 総シーン数}}
+                         \end{array}$$\normalsize
+                 \quad\\  % 空一行
+      \end{itemize}
+      \item 与loss相匹配的dataset和loader
+      \item validation集分割，以便交叉验证
+      \item checkpoint保存,加载
+    \end{itemize}
+    \item 以上所有模块的拼接
+  \end{itemize}
+
+
+
+\end{CJK}
+\end{document}
